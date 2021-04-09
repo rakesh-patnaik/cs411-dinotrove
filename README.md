@@ -12,3 +12,6 @@ cd dinotrove
 mkdir mysqldata
 docker run -v "$PWD/mysqldata":/var/lib/mysql --name dinotrove-mysql -e MYSQL_ROOT_PASSWORD=dinotrove -d mysql:8.0.23
 ```
+
+## access site
+http://localhost:8080/dinosaur/listing
