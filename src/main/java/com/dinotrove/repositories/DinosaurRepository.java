@@ -14,6 +14,6 @@ public interface DinosaurRepository extends CrudRepository<Dinosaur, Long> {
     
     List<Dinosaur> findByName(String name);
     
-    @Query(value = "select t.* from Dinosaurs t where LOWER(t.name) LIKE :searchString OR LOWER(t.description) LIKE :searchString", nativeQuery = true)
+    @Query(value = "select t.* from dinosaurs t where LOWER(t.name) LIKE :searchString OR LOWER(t.description) LIKE :searchString", nativeQuery = true)
     List<Dinosaur> findBySearchString(@Param("searchString")String searchString);
 }
