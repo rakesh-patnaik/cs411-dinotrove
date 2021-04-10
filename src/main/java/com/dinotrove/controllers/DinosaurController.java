@@ -1,10 +1,15 @@
 package com.dinotrove.controllers;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.validation.Valid;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dinotrove.entities.Dinosaur;
+import com.dinotrove.entities.DinosaurDetail;
 import com.dinotrove.repositories.DinosaurRepository;
 import com.dinotrove.utils.StringHelper;
 
@@ -36,8 +42,23 @@ public class DinosaurController {
     	String escapeSQL = StringHelper.escapeSQL(searchString);
 		String wildCardSearch = StringHelper.makeWildCardString(escapeSQL);
     	model.addAttribute("searchString", escapeSQL);
-        model.addAttribute("dinosaurs", dinosaurRepository.findBySearchString(wildCardSearch));
+    	List<Dinosaur> userSearchResults = dinosaurRepository.findBySearchString(wildCardSearch);
+    	if(CollectionUtils.isEmpty(userSearchResults)) {
+    		model.addAttribute("userSearchReturnedEmpty", true);
+    		userSearchResults = dinosaurRepository.findBySearchString(StringHelper.makeWildCardString(""));
+    	}
+    	model.addAttribute("selectedDinosaur", userSearchResults.get(0));
+		model.addAttribute("dinosaurs", userSearchResults);
         return "main";
+    }
+    
+    @GetMapping("/details/{dinosaurId}")
+    public ResponseEntity<?> getDinosaurDetails(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
+    	Optional<Dinosaur> findById = dinosaurRepository.findById(dinosaurId);
+    	DinosaurDetail dinosaurDetail = new DinosaurDetail();
+    	dinosaurDetail.setDinosaur(findById.get());
+    	//TODO set image details
+    	return ResponseEntity.ok(dinosaurDetail);
     }
     
     @GetMapping("/adddinosaur")

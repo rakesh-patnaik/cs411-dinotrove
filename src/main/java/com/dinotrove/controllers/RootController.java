@@ -12,7 +12,7 @@ public class RootController {
     
     @GetMapping("/")
     public void getIndex(HttpServletResponse response) throws IOException {
-    	response.sendRedirect("dinosaur/listing");
+    	response.sendRedirect("dinosaur/main");
     }
 
 }
