@@ -4,3 +4,4 @@ mysqldata
 .project
 .settings
 target
+/bin/
