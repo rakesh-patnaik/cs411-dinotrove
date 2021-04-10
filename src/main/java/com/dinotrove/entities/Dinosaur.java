@@ -14,91 +14,82 @@ public class Dinosaur {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="dinosaur_id")
-    private long id;
+    private long dinosaurId;
     @NotBlank(message = "Name is mandatory")
     private String name;
-    
-    private String type;
-
-    @Column(name = "size_height")
+    private String dinosaurType;
     private Double sizeHeight;
-    @Column(name = "size_weight")
     private Double sizeWeight;
-    @Column(name = "size_length")
     private Double sizeLength;
-
     private String description;
-
-    @Column(name="all_facts_document_id")
     private String allFactsDocumentId;
 
     public Dinosaur() {}
 
-    public void setId(long id) {
-        this.id = id;
-    }
-    
-    public long getId() {
-        return id;
-    }
+	public long getDinosaurId() {
+		return dinosaurId;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setDinosaurId(long dinosaurId) {
+		this.dinosaurId = dinosaurId;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public String getDinosaurType() {
+		return dinosaurType;
+	}
 
-    public Double getSizeHeight() {
-        return sizeHeight;
-    }
+	public void setDinosaurType(String dinosaurType) {
+		this.dinosaurType = dinosaurType;
+	}
 
-    public void setSizeHeight(Double sizeHeight) {
-        this.sizeHeight = sizeHeight;
-    }
+	public Double getSizeHeight() {
+		return sizeHeight;
+	}
 
-    public Double getSizeWeight() {
-        return sizeWeight;
-    }
+	public void setSizeHeight(Double sizeHeight) {
+		this.sizeHeight = sizeHeight;
+	}
 
-    public void setSizeWeight(Double sizeWeight) {
-        this.sizeWeight = sizeWeight;
-    }
+	public Double getSizeWeight() {
+		return sizeWeight;
+	}
 
-    public Double getSizeLength() {
-        return sizeLength;
-    }
+	public void setSizeWeight(Double sizeWeight) {
+		this.sizeWeight = sizeWeight;
+	}
 
-    public void setSizeLength(Double sizeLength) {
-        this.sizeLength = sizeLength;
-    }
+	public Double getSizeLength() {
+		return sizeLength;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setSizeLength(Double sizeLength) {
+		this.sizeLength = sizeLength;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getAllFactsDocumentId() {
-        return allFactsDocumentId;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setAllFactsDocumentId(String allFactsDocumentId) {
-        this.allFactsDocumentId = allFactsDocumentId;
-    }
-    
+	public String getAllFactsDocumentId() {
+		return allFactsDocumentId;
+	}
+
+	public void setAllFactsDocumentId(String allFactsDocumentId) {
+		this.allFactsDocumentId = allFactsDocumentId;
+	}
+
     
  
 }

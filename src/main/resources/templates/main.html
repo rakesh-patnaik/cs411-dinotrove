@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+<title>Dashboard Template for Bootstrap</title>
+
+<link rel="canonical"
+	href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">DinoTrove</a>
+		<form id="searchForm" name="searchForm" method="POST">
+			<input id="searchString" name="searchString" class="form-control form-control-dark w-100" type="text"
+				placeholder="Search" aria-label="Search">
+		</form>
+		<ul class="navbar-nav px-3">
+			<li class="nav-item text-nowrap"><a class="nav-link" href="#">Sign
+					out</a></li>
+		</ul>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div class="sidebar-sticky">
+					<ul class="nav flex-column">
+						<li class="nav-item"><a class="nav-link active" href="#">
+								<span data-feather="home"></span> Dino Dashboard <span
+								class="sr-only">(current)</span>
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"> <span
+								data-feather="file"></span> Dino Toys
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"> <span
+								data-feather="shopping-cart"></span> Dino Videos
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"> <span
+								data-feather="users"></span> Dino Users
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"> <span
+								data-feather="bar-chart-2"></span> Dino Reports
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="#"> <span
+								data-feather="layers"></span> Dino Puzzles
+						</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+				<div class="row mx-md-n5">
+					<div class="col px-md-5">
+						<img src="/images/Eoraptor.png" class="img-fluid" alt="Dino image">
+					</div>
+					<div class="card">
+						<h5 class="card-header"><span th:text="${}"></span></h5>
+						<div class="card-body">
+							<h5 class="card-title">Special title treatment</h5>
+							<p class="card-text">With supporting text below as a natural
+								lead-in to additional content.</p>
+							<a href="#" class="btn btn-primary">Toys</a>
+							<a href="#" class="btn btn-primary">Videos</a>
+						</div>
+					</div>
+				</div>
+
+				<h2>Dinosaur Listing - Search Criteria: <span th:text="${searchString}"></span> </h2>
+				<div class="table-responsive">
+					<table class="table table-striped table-sm">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Eating Habbit</th>
+								<th>Description</th>
+								<th>Weight</th>
+								<th>Height</th>
+								<th>Length</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="dinosaur: ${dinosaurs}">
+								<td th:text="${dinosaur.dinosaurId}" />
+								<td th:text="${dinosaur.name}" />
+								<td th:text="${dinosaur.dinosaurType}" />
+								<td th:text="${dinosaur.description}" />
+								<td th:text="${dinosaur.sizeWeight}" />
+								<td th:text="${dinosaur.sizeHeight}" />
+								<td th:text="${dinosaur.sizeLength}" />
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<div class="canvas-holder">
+					<canvas id="chart-area1" width="800" height="400"></canvas>
+				</div>
+
+			</main>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="/js/vendor/jquery-slim.min.js"><\/script>')
+	</script>
+	<script src="/js/vendor/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+
+	<!-- Icons -->
+	<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+		feather.replace()
+	</script>
+
+	<!-- Search -->
+	$('.searchText').bind("enterKey",function(e){
+	   $('form#searchForm').submit();
+    	return false;
+	});
+	$('.searchText').keyup(function(e){
+	    if(e.keyCode == 13)
+	    {
+	        $(this).trigger("enterKey");
+	    }
+	});
+	<!-- Graphs https://codepen.io/kurkle/pen/JqbzgQ -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@0.2.3"></script>
+	<script>
+		function colorFromValue(value, border) {
+			var alpha = (1 + Math.log(value)) / 5;
+			var color = "orange";
+			if (border) {
+				alpha += 300;
+			}
+			return Chart.helpers.color(color).alpha(alpha).rgbString();
+		}
+
+		ctx = document.getElementById("chart-area1").getContext("2d");
+		window.chart1b = new Chart(ctx, {
+			type : "treemap",
+			data : {
+				datasets : [ {
+					label : "Sample with labels",
+					tree : [ {
+						value : 100,
+						title : 'Tyrannosaurus'
+					}, {
+						value : 20,
+						title : 'Styracosaurus'
+					}, {
+						value : 5,
+						title : 'Titanosaurus'
+					}, {
+						value : 15,
+						title : 'Giganotosaurus'
+					} ],
+					key : 'value',
+					groups : [ 'title' ],
+					fontColor : 'black',
+					fontFamily : 'Optima',
+					fontSize : 20,
+					backgroundColor : function(ctx) {
+						return colorFromValue(ctx.dataset.data[ctx.dataIndex]);
+					},
+					borderColor : function(ctx) {
+						return colorFromValue(ctx.dataset.data[ctx.dataIndex],
+								true);
+					},
+					spacing : 0.1,
+					borderWidth : 3,
+					borderColor : "rgba(2,18,180, 0.15)"
+				} ]
+			},
+			options : {
+				maintainAspectRatio : false,
+				title : {
+					display : true,
+					text : "Dino Activity Heat Map"
+				},
+				legend : {
+					display : false
+				},
+				tooltips : {
+					callbacks : {
+						title : function(item, data) {
+							return data.datasets[item[0].datasetIndex].key;
+						},
+						label : function(item, data) {
+							var dataset = data.datasets[item.datasetIndex];
+							var dataItem = dataset.data[item.index];
+							return dataItem.v;
+						}
+					}
+				}
+			}
+		});
+	</script>
+</body>
+</html>
+
