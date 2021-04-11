@@ -60,6 +60,12 @@ public class DinosaurController {
     	//TODO set image details
     	return ResponseEntity.ok(dinosaurDetail);
     }
+
+    @GetMapping("/crud/listing")
+    public String getCrudListing(Model model) {
+    	Iterable<Dinosaur> findAll = dinosaurRepository.findAll();
+        return "dino_lab";
+    }
     
     @GetMapping("/adddinosaur")
     public String showAddDinosaurForm(Dinosaur dinosaur) {
