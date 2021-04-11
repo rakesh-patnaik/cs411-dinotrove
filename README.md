@@ -20,3 +20,15 @@ FLUSH PRIVILEGES;
 
 ## access site
 http://localhost:8080/dinosaur/listing
+
+##  Project Stage 4
+	- Search Dinosaurs (Dino Dashboard - search and viewing)
+	- CRUD dinosaurs (Dino Lab)
+	- Scraping Data from External sources for populating Dinosaurs
+	- Schema and Source Code
+	- Future items
+		- Indexing(for search), Prepared Statements(dino reports, clickstream relation to Dinosaurs, Toys, Videos etc)
+		- Video scraping and insert
+		- Toys scraping and insert
+		- Document DB to store Dino articles (text and image)
+		- Analytics (click stream and Heat Map)

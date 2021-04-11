@@ -107,18 +107,6 @@
 		feather.replace()
 	</script>
 
-	<!-- Search -->
-	$('.searchText').bind("enterKey",function(e){
-	   $('form#searchForm').submit();
-    	return false;
-	});
-	$('.searchText').keyup(function(e){
-	    if(e.keyCode == 13)
-	    {
-	        $(this).trigger("enterKey");
-	    }
-	});
-	
 	<!-- dinosaur detail -->
 	<script>
 	function dinoSearchItemClicked(dinosaurId) {
