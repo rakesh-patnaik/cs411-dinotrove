@@ -9,9 +9,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -78,6 +78,7 @@ public class DinosaurController {
         return "dino_lab";
     }
     @PostMapping("/crud/listing")
+    @Transactional
     public String saveCrudListing(@Valid Dinosaur editDinosaur, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "dino_lab";
@@ -91,6 +92,7 @@ public class DinosaurController {
     }  
     
     @DeleteMapping("/crud/listing/{dinosaurId}")
+    @Transactional
     public ResponseEntity<?> deleteCrudListing(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
         dinosaurRepository.deleteById(dinosaurId);
         return ResponseEntity.ok(null);
