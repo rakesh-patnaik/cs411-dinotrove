@@ -159,9 +159,15 @@
 		        contentType: "application/json",
 		        url: "/dinosaur/crud/listing/" + dinosaurId,
 		        cache: false,
-		        timeout: 600000
+		        timeout: 600000,
+		        success: function (data) {
+					console.log("DELETE SUCCESS : ", data);
+					window.location.href="/dinosaur/crud/listing?dinosaurId=-1";
+	        	},
+		        error: function (e) {
+		            console.log("DELETE ERROR : ", e);
+		        }
 	    	});
-			window.location.href="/dinosaur/crud/listing?dinosaurId=-1";
 		});
 	</script>
 

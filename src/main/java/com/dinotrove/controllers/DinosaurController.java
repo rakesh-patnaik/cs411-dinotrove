@@ -93,9 +93,9 @@ public class DinosaurController {
     
     @DeleteMapping("/crud/listing/{dinosaurId}")
     @Transactional
-    public ResponseEntity<?> deleteCrudListing(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
+    public ResponseEntity<Long> deleteCrudListing(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
         dinosaurRepository.deleteById(dinosaurId);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(dinosaurId);
     }  
     
    
