@@ -13,8 +13,8 @@ import javax.validation.constraints.NotBlank;
 public class Dinosaur {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long dinosaurId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long dinosaurId;
     @NotBlank(message = "Name is mandatory")
     private String name;
     private String dinosaurType;
@@ -26,11 +26,11 @@ public class Dinosaur {
 
     public Dinosaur() {}
 
-	public long getDinosaurId() {
+	public Long getDinosaurId() {
 		return dinosaurId;
 	}
 
-	public void setDinosaurId(long dinosaurId) {
+	public void setDinosaurId(Long dinosaurId) {
 		this.dinosaurId = dinosaurId;
 	}
 

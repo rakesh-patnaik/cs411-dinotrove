@@ -67,7 +67,10 @@ public class DinosaurController {
     	Iterable<Dinosaur> findAll = dinosaurRepository.findAll();
 		model.addAttribute("allDinosaurs", findAll);
 		Dinosaur editDinosaur = findAll.iterator().next();
-		if(dinosaurId != null) {
+		if(dinosaurId != null && dinosaurId == -1) {
+			editDinosaur = new Dinosaur();
+			editDinosaur.setDinosaurId(Long.valueOf(-1));
+		}else if(dinosaurId != null) {
 			editDinosaur = dinosaurRepository.findById(dinosaurId).get();
 		}
 		model.addAttribute("editDinosaur", editDinosaur);
@@ -79,6 +82,9 @@ public class DinosaurController {
             return "dino_lab";
         }
         editDinosaur.setAllFactsDocumentId("1");
+        if(editDinosaur.getDinosaurId() == -1) {
+        	editDinosaur.setDinosaurId(null);
+        }
         dinosaurRepository.save(editDinosaur);
         return "redirect:/dinosaur/crud/listing?dinosaurId="+editDinosaur.getDinosaurId();
     }   

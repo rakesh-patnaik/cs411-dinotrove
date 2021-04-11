@@ -147,13 +147,8 @@
 			window.location.href="/dinosaur/crud/listing?dinosaurId="+ dinosaurId;
 		}
 		$('#addButton').click(function(e) {
-			$('#dinosaurId').val("");
-			$('#name').val("");
-			$('#description').val("");
-			$('#sizeHeight').val("");
-			$('#sizeLength').val("");
-			$('#sizeWeight').val("");
 			e.preventDefault();
+			window.location.href="/dinosaur/crud/listing?dinosaurId=-1";
 		});
 	</script>
 
