@@ -9,10 +9,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +25,6 @@ import com.dinotrove.entities.Dinosaur;
 import com.dinotrove.entities.DinosaurDetail;
 import com.dinotrove.repositories.DinosaurRepository;
 import com.dinotrove.utils.StringHelper;
-import org.apache.commons.collections4.IteratorUtils;
 
 @Controller
 @RequestMapping("/dinosaur")
@@ -87,48 +88,13 @@ public class DinosaurController {
         }
         dinosaurRepository.save(editDinosaur);
         return "redirect:/dinosaur/crud/listing?dinosaurId="+editDinosaur.getDinosaurId();
-    }   
+    }  
     
-    @GetMapping("/adddinosaur")
-    public String showAddDinosaurForm(Dinosaur dinosaur) {
-        return "add-dinosaur";
-    }
+    @DeleteMapping("/crud/listing/{dinosaurId}")
+    public ResponseEntity<?> deleteCrudListing(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
+        dinosaurRepository.deleteById(dinosaurId);
+        return ResponseEntity.ok(null);
+    }  
     
-    @PostMapping("/adddinosaur")
-    public String addDinosaur(@Valid Dinosaur dinosaur, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "add-dinosaur";
-        }
-        
-        dinosaurRepository.save(dinosaur);
-        return "redirect:/main";
-    }
-    
-    @GetMapping("/edit/{id}")
-    public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        Dinosaur dinosaur = dinosaurRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid dinosaur Id:" + id));
-        model.addAttribute("dinosaur", dinosaur);
-        
-        return "update-dinosaur";
-    }
-    
-    @PostMapping("/update/{id}")
-    public String updateDinosaur(@PathVariable("id") long id, @Valid Dinosaur dinosaur, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            dinosaur.setDinosaurId(id);
-            return "update-dinosaur";
-        }
-        
-        dinosaurRepository.save(dinosaur);
-
-        return "redirect:/main";
-    }
-    
-    @GetMapping("/delete/{id}")
-    public String deleteDinosaur(@PathVariable("id") long id, Model model) {
-        Dinosaur dinosaur = dinosaurRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid dinosaur Id:" + id));
-        dinosaurRepository.delete(dinosaur);
-        
-        return "redirect:/main";
-    }
+   
 }

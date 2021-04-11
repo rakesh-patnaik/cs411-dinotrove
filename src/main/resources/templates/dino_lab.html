@@ -94,13 +94,14 @@
 					</div>
 					<div class="row">
 						<div class="col-md-6 mt-5">
-							<input type="submit" id="addButton" class="btn btn-primary"	value="New"> 
-							<input type="submit" class="btn btn-primary" value="Save">
+							<input type="submit" id="addButton" class="btn btn-primary"	value="New"></input> 
+							<input type="submit" class="btn btn-primary" value="Save"></input>
+							<input type="submit" id="deleteButton" class="btn btn-primary" value="Delete"></input>
 						</div>
 					</div>
 				</form>
 
-				<h4>All Dinosaurs</h4>
+				<h4>All Dinosaurs: click on one to update or delete</h4>
 				<div class="table-responsive">
 					<table class="table table-striped table-sm">
 						<thead>
@@ -149,6 +150,18 @@
 		$('#addButton').click(function(e) {
 			e.preventDefault();
 			window.location.href="/dinosaur/crud/listing?dinosaurId=-1";
+		});
+		$('#deleteButton').click(function(e) {
+			e.preventDefault();
+			var dinosaurId = $('#dinosaurId').val();
+			$.ajax({
+		        type: "DELETE",
+		        contentType: "application/json",
+		        url: "/dinosaur/crud/listing/" + dinosaurId,
+		        cache: false,
+		        timeout: 600000
+	    	});
+			window.location.href="/dinosaur/crud/listing";
 		});
 	</script>
 
