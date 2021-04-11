@@ -23,6 +23,7 @@ import com.dinotrove.entities.Dinosaur;
 import com.dinotrove.entities.DinosaurDetail;
 import com.dinotrove.repositories.DinosaurRepository;
 import com.dinotrove.utils.StringHelper;
+import org.apache.commons.collections4.IteratorUtils;
 
 @Controller
 @RequestMapping("/dinosaur")
@@ -62,10 +63,25 @@ public class DinosaurController {
     }
 
     @GetMapping("/crud/listing")
-    public String getCrudListing(Model model) {
+    public String getCrudListing(@RequestParam(name="dinosaurId", required=false) Long dinosaurId, Model model) {
     	Iterable<Dinosaur> findAll = dinosaurRepository.findAll();
+		model.addAttribute("allDinosaurs", findAll);
+		Dinosaur editDinosaur = findAll.iterator().next();
+		if(dinosaurId != null) {
+			editDinosaur = dinosaurRepository.findById(dinosaurId).get();
+		}
+		model.addAttribute("editDinosaur", editDinosaur);
         return "dino_lab";
     }
+    @PostMapping("/crud/listing")
+    public String saveCrudListing(@Valid Dinosaur editDinosaur, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "dino_lab";
+        }
+        editDinosaur.setAllFactsDocumentId("1");
+        dinosaurRepository.save(editDinosaur);
+        return "redirect:/dinosaur/crud/listing?dinosaurId="+editDinosaur.getDinosaurId();
+    }   
     
     @GetMapping("/adddinosaur")
     public String showAddDinosaurForm(Dinosaur dinosaur) {
