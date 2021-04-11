@@ -2,8 +2,6 @@ package com.dinotrove.repositories;
 
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,12 +14,16 @@ import com.dinotrove.entities.Dinosaur;
 @Repository
 public interface DinosaurRepository extends CrudRepository<Dinosaur, Long> {
     
-    List<Dinosaur> findByName(String name);
+	@Query(value = "select t.* from dinosaurs t where t.name=:name", 
+			nativeQuery = true)
+    List<Dinosaur> findByName(@Param("name")String name);
     
     @Query(value = "select t.* from dinosaurs t where LOWER(t.name) LIKE :searchString OR LOWER(t.description) LIKE :searchString", 
     				nativeQuery = true)
     List<Dinosaur> findBySearchString(@Param("searchString")String searchString);
     
+    
+    /** UPDATE a Dinosaur **/
     @Transactional  // START A Transaction to be atomic
     @Modifying(clearAutomatically = true, flushAutomatically = true) // Ensure JPA context is clean and it refreshes after this delete
     @Query(value = "update"
@@ -46,4 +48,16 @@ public interface DinosaurRepository extends CrudRepository<Dinosaur, Long> {
     					@Param("description") String description, 
     					@Param("allFactsDocumentId") String allFactsDocumentId);
     
+    
+    
+    /** DELETE a Dinosaur **/
+    @Transactional  // START A Transaction to be atomic
+    @Modifying(clearAutomatically = true, flushAutomatically = true) // Ensure JPA context is clean and it refreshes after this delete
+    @Query(value = "delete"
+            + "     from"
+    		+ "        dinosaurs"
+    		+ "    where"
+    		+ "        dinosaur_id=:dinosaurId",
+            nativeQuery = true)
+    void deleteDinosaur(@Param("dinosaurId") Long dinosaurId);
 }
