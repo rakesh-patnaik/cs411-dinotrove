@@ -1,14 +1,12 @@
 package com.dinotrove.controllers;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Random;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,17 +25,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.dinotrove.entities.Dinosaur;
+import com.dinotrove.entities.Video;
 import com.dinotrove.repositories.DinosaurRepository;
+import com.dinotrove.repositories.VideoRepository;
 
 @Controller
 @RequestMapping("/dataScraper")
 public class DataScraperController {
     
     private final DinosaurRepository dinosaurRepository;
+    private final VideoRepository videoRepository;
 
     @Autowired
-    public DataScraperController(DinosaurRepository dinosaurRepository) {
+    public DataScraperController(DinosaurRepository dinosaurRepository, VideoRepository videoRepository) {
         this.dinosaurRepository = dinosaurRepository;
+        this.videoRepository = videoRepository;
     }
     
     @GetMapping("/dinosaurs/import/kaggle")
@@ -111,6 +113,27 @@ public class DataScraperController {
 		}
 		
     	return new ResponseEntity<>("dinosaurpictures.org dataset Scraped successfully",HttpStatus.OK);  
+    }
+    
+    
+    @GetMapping("/dinosaurs/import/videos")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ResponseEntity<String> loadYoutubeVideos() throws Exception {
+    	Iterable<Dinosaur> findAll = dinosaurRepository.findAll();
+    	for(Dinosaur dinosaur: findAll) {
+    		Video video = new Video();
+    		video.setName(dinosaur.getName() + "Video");
+    		video.setVideoLength((double)new Random().nextInt(500));
+    		video.setVideoTitle(dinosaur.getDescription().substring(0,20 < dinosaur.getDescription().length()? 20: dinosaur.getDescription().length()-1));
+    		String[] video_urls = {"https://www.youtube.com/watch?v=VIGqad64wcs","https://www.youtube.com/watch?v=WVT8yB7mDMU","https://www.youtube.com/watch?v=gnv0s0WvKZM","https://www.youtube.com/watch?v=DFqkGbdawLo","https://www.youtube.com/watch?v=mwMN-892Jc4","https://www.youtube.com/watch?v=bElVNx093vw","https://www.youtube.com/watch?v=WHQM18Guv5c","https://www.youtube.com/watch?v=wLZX1QhISZk"};
+    		video.setVideoUrl(video_urls[new Random().nextInt(video_urls.length)]);
+    		if(CollectionUtils.isEmpty(video.getDinosaurs())){
+    			video.setDinosaurs(new HashSet<Dinosaur>());
+    		}
+    		video.getDinosaurs().add(dinosaur);
+    		videoRepository.save(video);
+    	}
+    	return new ResponseEntity<>("Updated video for each dinosaur",HttpStatus.OK); 
     }
 
 }

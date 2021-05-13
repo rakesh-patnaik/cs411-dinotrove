@@ -1,10 +1,16 @@
 package com.dinotrove.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -14,14 +20,20 @@ public class Dinosaur {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="DINOSAUR_ID")
     private Long dinosaurId;
     @NotBlank(message = "Name is mandatory")
     private String name;
+    @Column(name="DINOSAUR_TYPE")
     private String dinosaurType;
+    @Column(name="SIZE_HEIGHT")
     private Double sizeHeight;
+    @Column(name="SIZE_WEIGHT")
     private Double sizeWeight;
+    @Column(name="SIZE_LENGTH")
     private Double sizeLength;
     private String description;
+    @Column(name="ALL_FACTS_DOCUMENT_ID")
     private String allFactsDocumentId;
 
     public Dinosaur() {}
@@ -89,6 +101,7 @@ public class Dinosaur {
 	public void setAllFactsDocumentId(String allFactsDocumentId) {
 		this.allFactsDocumentId = allFactsDocumentId;
 	}
+
 
     
  

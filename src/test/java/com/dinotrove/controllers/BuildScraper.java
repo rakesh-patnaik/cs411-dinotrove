@@ -1,7 +1,11 @@
 package com.dinotrove.controllers;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 public class BuildScraper {
 
@@ -26,10 +30,20 @@ public class BuildScraper {
 		
 //		System.out.printf("Title: %s\n", dinoDescription.toString());
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(BuildScraper.class.getResourceAsStream("/dinosaur-data/kaggle-dinosaur.csv")));
-            String newDinoLine = null;
-            while ((newDinoLine = br.readLine()) != null) {
-            	System.out.println(newDinoLine);
-            }		
+//            BufferedReader br = new BufferedReader(new InputStreamReader(BuildScraper.class.getResourceAsStream("/dinosaur-data/kaggle-dinosaur.csv")));
+//            String newDinoLine = null;
+//            while ((newDinoLine = br.readLine()) != null) {
+//            	System.out.println(newDinoLine);
+//            }	
+
+		
+
+		Document dinoVideoSearchDocument = Jsoup.connect("https://www.youtube.com/results?search_query=judiceratops").get();
+		Elements videoTitleElements = dinoVideoSearchDocument.select("#video-title");
+		StringBuilder dinoDescription = new StringBuilder();
+		while(videoTitleElements.iterator().hasNext()) {
+			String videoLink = videoTitleElements.next().attr("href");
+			System.out.println(videoLink);
+		}		
 	}
 }
