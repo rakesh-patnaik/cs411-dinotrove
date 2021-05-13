@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS dinosaur_trove DEFAULT CHARACTER SET utf8 DEFAULT 
 
 USE dinosaur_trove;
 
+DROP VIEW IF EXISTS dinosaur_video_summary;
 DROP TABLE IF EXISTS video_dinosaurs;
 DROP TABLE IF EXISTS video_ratings;
 DROP TABLE IF EXISTS rating;
@@ -14,6 +15,7 @@ DROP TABLE IF EXISTS user_clicks;
 DROP TABLE IF EXISTS sellers;
 DROP TABLE IF EXISTS user_activities;
 DROP TABLE IF EXISTS users;
+
 
 CREATE TABLE dinosaurs (
 	dinosaur_id INT NOT NULL AUTO_INCREMENT,
@@ -115,3 +117,14 @@ CREATE TABLE user_activities (
 );
 ALTER TABLE user_activities ADD CONSTRAINT fk_usr_act_user FOREIGN KEY (user_id) REFERENCES users(user_id);
 
+CREATE VIEW dinosaur_video_summary AS
+SELECT  d.dinosaur_id AS dinosaur_id,
+        d.name AS dinosaur_name, 
+        d.dinosaur_type AS dinosaur_type, 
+		SUM(v.video_length) AS total_video_length, 
+		MIN(v.video_length) AS min_video_length, 
+		MAX(v.video_length) AS max_video_length
+FROM dinosaurs d, video_dinosaurs vd, videos v
+WHERE d.dinosaur_id = vd.dinosaur_id
+AND v.video_id = vd.video_id
+GROUP BY d.dinosaur_id
