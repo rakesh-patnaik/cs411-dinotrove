@@ -1,8 +1,14 @@
 package com.dinotrove.controllers;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,16 +40,39 @@ public class DataScraperController {
         this.dinosaurRepository = dinosaurRepository;
     }
     
-    @GetMapping("/dinosaurs")
+    @GetMapping("/dinosaurs/import/kaggle")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ResponseEntity<String> getIndex(@RequestParam(name="fetchCount", required=false, defaultValue = "10") Long fetchCount) throws Exception {
+    public ResponseEntity<String> loadKaggleData() throws Exception {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dinosaur-data/kaggle-dinosaur.csv")));
+        String newDinoLine = null;
+        List<Dinosaur> scrapedDinosaurs = new ArrayList<Dinosaur>();
+        while ((newDinoLine = br.readLine()) != null) {
+        	String[] splitStrings = newDinoLine.split(",");
+        	Dinosaur dinosaur = new Dinosaur();
+        	dinosaur.setDescription(newDinoLine);
+        	dinosaur.setName(splitStrings[0]);
+        	dinosaur.setDinosaurType(splitStrings[2]);
+        	dinosaur.setAllFactsDocumentId("1");
+        	scrapedDinosaurs.add(dinosaur);
+        }
+		for(Dinosaur scrapedDinosaur: scrapedDinosaurs) {
+			List<Dinosaur> dinosaursWithSameName = dinosaurRepository.findByName(scrapedDinosaur.getName());
+			if(CollectionUtils.isEmpty(dinosaursWithSameName)) {
+				dinosaurRepository.save(scrapedDinosaur);
+			}
+		}
+    	return new ResponseEntity<>("Kaggle dataset Scraped successfully",HttpStatus.OK); 
+    }
+    
+    @GetMapping("/dinosaurs/import/dinosaurpicturesorg")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ResponseEntity<String> getIndex(@RequestParam(name="fetchCount", required=false, defaultValue = "10000") Long fetchCount) throws Exception {
     	RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<Object[]> responseEntity =
 				   restTemplate.getForEntity("https://dinosaurpictures.org/api/category/all", Object[].class);
 		
 		Object[] dinoArray = responseEntity.getBody();
 		
-		List<Dinosaur> scrapedDinosaurs = new ArrayList<Dinosaur>();
 		Dinosaur dinosaur = new Dinosaur();
 		int scrapeCount = 0;
 		for (Object dino : dinoArray) {
@@ -68,22 +97,20 @@ public class DataScraperController {
 			}else {
 				dinosaur.setDinosaurType("Unknown");
 			}
-			scrapedDinosaurs.add(dinosaur);
+			List<Dinosaur> dinosaursWithSameName = dinosaurRepository.findByName(dinosaur.getName());
+			if(CollectionUtils.isEmpty(dinosaursWithSameName)) {
+				dinosaur.setAllFactsDocumentId("1");
+				List<Dinosaur> findByName = dinosaurRepository.findByName(dinosaur.getName());
+				if(CollectionUtils.isEmpty(findByName)) {
+					dinosaurRepository.save(dinosaur);
+				}
+			}
 			scrapeCount++;
 			if(scrapeCount > fetchCount)
 				break;
 		}
 		
-		for(Dinosaur scrapedDinosaur: scrapedDinosaurs) {
-			List<Dinosaur> dinosaursWithSameName = dinosaurRepository.findByName(scrapedDinosaur.getName());
-			if(CollectionUtils.isEmpty(dinosaursWithSameName)) {
-				scrapedDinosaur.setAllFactsDocumentId("1");
-				dinosaurRepository.save(scrapedDinosaur);
-			}
-		}
-		
-		
-    	return new ResponseEntity<>("Scraped successfully",HttpStatus.OK);  
+    	return new ResponseEntity<>("dinosaurpictures.org dataset Scraped successfully",HttpStatus.OK);  
     }
 
 }
