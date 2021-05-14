@@ -103,6 +103,38 @@ curl http://localhost:8080/dataScraper/dinosaurs/import/articles
 			- Dinosaur create
 			- Dinosaur update
 			
+## database counts
+	- MongoDB
+```
+> db.DinoArticle.count();
+53137
+```
+	- MySQL
+```
+mysql> select count(*) from dinosaurs;
++----------+
+| count(*) |
++----------+
+|    52820 |
++----------+
+1 row in set (0.07 sec)
+
+mysql> select count(*) from videos;
++----------+
+| count(*) |
++----------+
+|   114822 |
++----------+
+1 row in set (0.07 sec)
+
+mysql> select count(*) from video_dinosaurs;
++----------+
+| count(*) |
++----------+
+|   114822 |
++----------+
+1 row in set (0.06 sec)
+```			
 ## mysql explain plan for index
 ```
 mysql> explain select
@@ -150,6 +182,8 @@ mysql> select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_T
 ```
 update dinosaur set name=LOWER(name);
 CREATE INDEX idx_dinosaurname ON dinosaurs(name);
+CREATE INDEX idx_dino_video_dinoid ON video_dinosaurs(dinosaur_id);
+
 show index from dinosaurs;
 ```
 		
