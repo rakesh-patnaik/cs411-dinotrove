@@ -30,7 +30,7 @@ public class ReportsController {
 
 	@RequestMapping("/video_summary")
 	public String getVideoSummary(Model model) {
-		Iterable<DinosaurVideoSummary> allResults = dinosaurVideoSummaryRepository.findAll();
+		Iterable<DinosaurVideoSummary> allResults = dinosaurVideoSummaryRepository.findVideoSummary();
 		model.addAttribute("dinosaurVideoSummaries", allResults);
 		return "dino_video_summary_reports";
 	}

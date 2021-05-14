@@ -96,6 +96,8 @@ CREATE TABLE video_dinosaurs (
 ALTER TABLE video_dinosaurs ADD CONSTRAINT fk_video_dinosaur_videos FOREIGN KEY (video_id) REFERENCES videos(video_id);
 ALTER TABLE video_dinosaurs ADD CONSTRAINT fk_video_dinosaur_dinosaurs FOREIGN KEY (dinosaur_id) REFERENCES dinosaurs(dinosaur_id);
 
+CREATE INDEX idx_dino_video_dinoid ON video_dinosaurs(dinosaur_id);
+
 CREATE TABLE sellers (
 	seller_id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
