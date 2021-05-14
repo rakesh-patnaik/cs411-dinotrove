@@ -1,4 +1,8 @@
-## Spring boot CRUD
+## DinoTrove
+UIUC CS411 team members:
+	- Sheena Albert
+	- Rakesh Patnaik
+	- David John
 
 ## Run project
 mvn spring-boot:run -Dmaven.test.skip=true
