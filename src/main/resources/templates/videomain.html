@@ -69,7 +69,7 @@
 								<td th:text="${video.videoId}" />
 								<td th:text="${video.name}" />
 								<td th:text="${video.videoTitle}" />
-								<td th:text="${video.videoLength}" />
+								<td th:text="${#numbers.formatDecimal(video.videoLength,5,2)}" />
 								<td th:text="${video.videoUrl}" />
 							</tr>
 

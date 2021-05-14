@@ -51,9 +51,9 @@
 								<td th:text="${dinosaurSummary.dinosaurId}" />
 								<td th:text="${dinosaurSummary.name}" />
 								<td th:text="${dinosaurSummary.dinosaurType}" />
-								<td th:text="${dinosaurSummary.totalVideoLength}" />
-								<td th:text="${dinosaurSummary.minVideoLength}" />
-								<td th:text="${dinosaurSummary.maxVideoLength}" />
+								<td th:text="${#numbers.formatDecimal(dinosaurSummary.totalVideoLength,5,2)}" />
+								<td th:text="${#numbers.formatDecimal(dinosaurSummary.minVideoLength,5,2)}" />
+								<td th:text="${#numbers.formatDecimal(dinosaurSummary.maxVideoLength,5,2)}" />
 							</tr>
 
 						</tbody>

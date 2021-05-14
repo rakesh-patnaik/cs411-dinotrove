@@ -10,6 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,9 +48,14 @@ public class DinosaurController {
     @RequestMapping("/main")
     public String searchDinosaurs(@RequestParam(defaultValue = "") String searchString, Model model) {
     	String escapeSQL = StringHelper.escapeSQL(searchString);
+    	String suffixWildCardSearch = StringHelper.makeSuffixWildCardString(escapeSQL);
+    	model.addAttribute("searchString", suffixWildCardSearch);
 		String wildCardSearch = StringHelper.makeWildCardString(escapeSQL);
-    	model.addAttribute("searchString", escapeSQL);
-    	List<Dinosaur> userSearchResults = dinosaurRepository.findBySearchString(wildCardSearch);
+    	List<Dinosaur> userSearchResults = dinosaurRepository.findBySearchString(suffixWildCardSearch);
+    	if(CollectionUtils.isEmpty(userSearchResults)) {
+        	model.addAttribute("searchString", wildCardSearch);
+    		userSearchResults = dinosaurRepository.findBySearchString(wildCardSearch);
+    	}
     	if(CollectionUtils.isEmpty(userSearchResults)) {
     		model.addAttribute("userSearchReturnedEmpty", true);
     		userSearchResults = dinosaurRepository.findBySearchString(StringHelper.makeWildCardString(""));
@@ -96,6 +102,7 @@ public class DinosaurController {
         	editDinosaur.setDinosaurId(null);
         }
         dinosaurRepository.save(editDinosaur);
+                
         return "redirect:/dinosaur/crud/listing?dinosaurId="+editDinosaur.getDinosaurId();
     }  
     

@@ -16,4 +16,21 @@ public interface VideoRepository extends CrudRepository<Video, Long> {
 	List<Video> findBySearchString(@Param("searchString") String searchString);
 
 	
+	@Query(value="(SELECT v.*\n"
+			+ "FROM\n"
+			+ "	videos v,\n"
+			+ "	(SELECT video_id, \n"
+			+ "			count(*) as dino_count\n"
+			+ "	FROM video_dinosaurs vd \n"
+			+ "	GROUP BY video_id\n"
+			+ "    ORDER BY dino_count \n"
+			+ "    LIMIT 100) AS video_top100_dino_count\n"
+			+ "WHERE v.video_id = video_top100_dino_count.video_id)\n"
+			+ "UNION\n"
+			+ "(SELECT v.*\n"
+			+ "FROM\n"
+			+ "	videos v\n"
+			+ "ORDER BY v.video_length DESC\n"
+			+ "LIMIT 100)", nativeQuery=true)
+	List<Video> findVideosThatFeatureAsTop100ForDinoCountOrAsTop100ForVideoLength();
 }

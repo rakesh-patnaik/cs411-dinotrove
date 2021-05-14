@@ -1,6 +1,9 @@
 package com.dinotrove.utils;
 
 public class StringHelper {
+	public static String makeSuffixWildCardString(String inputString) {
+		return inputString.toLowerCase() + "%";
+	}
 	public static String makeWildCardString(String inputString) {
 		return "%" + inputString.toLowerCase() + "%";
 	}

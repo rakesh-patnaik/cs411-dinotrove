@@ -14,11 +14,11 @@ import com.dinotrove.entities.Dinosaur;
 @Repository
 public interface DinosaurRepository extends CrudRepository<Dinosaur, Long> {
     
-	@Query(value = "select t.* from dinosaurs t where lower(t.name)=lower(:name)", 
+	@Query(value = "select t.* from dinosaurs t where t.name=:name", 
 			nativeQuery = true)
     List<Dinosaur> findByName(@Param("name")String name);
     
-    @Query(value = "select t.* from dinosaurs t where LOWER(t.name) LIKE :searchString OR LOWER(t.description) LIKE :searchString LIMIT 1000", 
+    @Query(value = "select t.* from dinosaurs t where t.name LIKE :searchString OR t.description LIKE :searchString LIMIT 1000", 
     				nativeQuery = true)
     List<Dinosaur> findBySearchString(@Param("searchString")String searchString);
     

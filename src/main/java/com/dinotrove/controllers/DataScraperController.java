@@ -61,7 +61,7 @@ public class DataScraperController {
 			String[] splitStrings = newDinoLine.split(",");
 			Dinosaur dinosaur = new Dinosaur();
 			dinosaur.setDescription(newDinoLine);
-			dinosaur.setName(splitStrings[0]);
+			dinosaur.setName(splitStrings[0].toLowerCase());
 			dinosaur.setDinosaurType(splitStrings[2]);
 			dinosaur.setAllFactsDocumentId("1");
 			scrapedDinosaurs.add(dinosaur);
@@ -89,7 +89,7 @@ public class DataScraperController {
 		Dinosaur dinosaur = new Dinosaur();
 		int scrapeCount = 0;
 		for (Object dino : dinoArray) {
-			dinosaur.setName(dino.toString());
+			dinosaur.setName(dino.toString().toLowerCase());
 			Document dinoDocument = Jsoup.connect("https://dinosaurpictures.org/" + dino + "-pictures").get();
 			Elements introDivs = dinoDocument.getElementsByClass("intro");
 			Elements descriptionParas = introDivs.get(0).getElementsByTag("p");

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+<title>Dinotrove</title>
+
+<link rel="canonical"
+	href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
+
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+		<div th:replace="search_bar.html"></div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div th:replace="sidebar.html"></div>
+			</nav>
+
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+				<h4>Videos that feature in top 100 w.r.t featured dinosaurs Or top 100 in video length</h4>
+				<div class="table-responsive">
+					<table class="table table-striped table-sm">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Title</th>
+								<th>Length</th>
+								<th>Video URL</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr style="cursor: pointer" th:each="video: ${videos}">
+								<td th:text="${video.videoId}" />
+								<td th:text="${video.name}" />
+								<td th:text="${video.videoTitle}" />
+								<td th:text="${#numbers.formatDecimal(video.videoLength,5,2)}" />
+								<td th:text="${video.videoUrl}" />
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				
+			</main>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script
+	  src="https://code.jquery.com/jquery-3.4.1.min.js"
+	  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	  crossorigin="anonymous"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="/js/vendor/jquery-slim.min.js"><\/script>')
+	</script>
+	<script src="/js/vendor/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+
+	<!-- Icons -->
+	<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+		feather.replace()
+	</script>
+
+</body>
+</html>
+
