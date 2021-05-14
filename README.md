@@ -102,6 +102,9 @@ curl http://localhost:8080/dataScraper/dinosaurs/import/articles
 		- Transaction
 			- Dinosaur create
 			- Dinosaur update
+
+		- Stored Procedures
+			- operational tasks such as cleaning indexes using store proc DeleteIndexsIfExists
 			
 ## database counts
 	- MongoDB
