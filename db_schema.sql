@@ -2,6 +2,18 @@ CREATE DATABASE IF NOT EXISTS dinosaur_trove DEFAULT CHARACTER SET utf8 DEFAULT 
 
 USE dinosaur_trove;
 
+/* Clean database before creating Schema */
+CREATE PROCEDURE DeleteIndexsIfExists()
+	BEGIN
+	
+		IF EXISTS ( SELECT * FROM INFORMATION_SCHEMA.STATISTICS  WHERE TABLE_NAME = 'dinosaurs'
+		            AND INDEX_NAME = 'idx_dinosaurname' AND INDEX_SCHEMA='dinosaur_trove') THEN
+		   ALTER TABLE dinosaurs DROP index idx_dinosaurname;
+	END IF;
+END;
+
+CALL DeleteIndexsIfExists();
+
 DROP VIEW IF EXISTS dinosaur_video_summary;
 DROP TABLE IF EXISTS video_dinosaurs;
 DROP TABLE IF EXISTS video_ratings;
@@ -28,6 +40,8 @@ CREATE TABLE dinosaurs (
     all_facts_document_id  INT NOT NULL,
 	CONSTRAINT pk_dinosaur PRIMARY KEY (dinosaur_id)
 );
+
+CREATE INDEX idx_dinosaurname ON dinosaurs(name);
 
 CREATE TABLE users (
 	user_id INT NOT NULL AUTO_INCREMENT,

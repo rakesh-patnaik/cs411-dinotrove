@@ -15,4 +15,5 @@ public interface VideoRepository extends CrudRepository<Video, Long> {
 	@Query(value = "select t.* from videos t where LOWER(t.name) LIKE :searchString OR LOWER(t.video_title) LIKE :searchString LIMIT 1000", nativeQuery = true)
 	List<Video> findBySearchString(@Param("searchString") String searchString);
 
+	
 }

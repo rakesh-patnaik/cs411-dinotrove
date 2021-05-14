@@ -60,4 +60,16 @@ public interface DinosaurRepository extends CrudRepository<Dinosaur, Long> {
     		+ "        dinosaur_id=:dinosaurId",
             nativeQuery = true)
     void deleteDinosaur(@Param("dinosaurId") Long dinosaurId);
+    
+    @Query(value = "select max(dinosaur_id) from dinosaurs",
+            nativeQuery = true)
+    Long getMaxDinosaurId();
+    
+    @Query(value = "select min(dinosaur_id) from dinosaurs",
+            nativeQuery = true)
+    Long getMinDinosaurId();
+    
+    @Query(value = "select count(*) from dinosaurs",
+            nativeQuery = true)
+    Long getTotalDinosaurs();
 }

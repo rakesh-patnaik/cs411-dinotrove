@@ -1,19 +1,31 @@
 <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">DinoTrove</a>
-<form id="searchForm" name="searchForm" method="POST" action="/dinosaur/main">
-	<input id="searchString" name="searchString" class="form-control form-control-dark w-100" type="text"
+<form id="searchForm" name="searchForm" method="POST"
+	action="/dinosaur/main">
+	<input id="searchString" name="searchString"
+		class="form-control form-control-dark w-100" type="text"
 		placeholder="Search" aria-label="Search">
 </form>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
 <script>
-$('.searchText').bind("enterKey",function(e){
-   $('form#searchForm').submit();
-   	return false;
-});
-$('.searchText').keyup(function(e){
-    if(e.keyCode == 13)
-    {
-        $(this).trigger("enterKey");
-    }
-});
+	window.jQuery
+			|| document
+					.write('<script src="/js/vendor/jquery-slim.min.js"><\/script>')
+</script>
+<script src="/js/vendor/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+<script>
+	$('.searchText').bind("enterKey", function(e) {
+		$('form#searchForm').submit();
+		return false;
+	});
+	$('.searchText').keyup(function(e) {
+		if (e.keyCode == 13) {
+			$(this).trigger("enterKey");
+		}
+	});
 </script>
 <ul class="navbar-nav px-3">
 	<li class="nav-item text-nowrap"><a class="nav-link" href="#">Sign

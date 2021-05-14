@@ -2,6 +2,7 @@ package com.dinotrove.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dinotrove.entities.Dinosaur;
 import com.dinotrove.entities.DinosaurDetail;
+import com.dinotrove.repositories.DinoArticleRepository;
 import com.dinotrove.repositories.DinosaurRepository;
 import com.dinotrove.utils.StringHelper;
 
@@ -33,10 +35,13 @@ public class DinosaurController {
 	private Logger logger = LoggerFactory.getLogger(DinosaurController.class);
 	
     private final DinosaurRepository dinosaurRepository;
+    
+    private final DinoArticleRepository dinoArticleRepository;
 
     @Autowired
-    public DinosaurController(DinosaurRepository dinosaurRepository) {
+    public DinosaurController(DinosaurRepository dinosaurRepository, DinoArticleRepository dinoArticleRepository) {
         this.dinosaurRepository = dinosaurRepository;
+        this.dinoArticleRepository = dinoArticleRepository;
     }
     
     @RequestMapping("/main")
@@ -49,7 +54,8 @@ public class DinosaurController {
     		model.addAttribute("userSearchReturnedEmpty", true);
     		userSearchResults = dinosaurRepository.findBySearchString(StringHelper.makeWildCardString(""));
     	}
-    	model.addAttribute("selectedDinosaur", userSearchResults.get(0));
+    	Dinosaur selectedDinosaur = userSearchResults.get(new Random().nextInt(userSearchResults.size()));
+		model.addAttribute("selectedDinosaur", selectedDinosaur);
 		model.addAttribute("dinosaurs", userSearchResults);
         return "main";
     }
@@ -58,7 +64,9 @@ public class DinosaurController {
     public ResponseEntity<?> getDinosaurDetails(@PathVariable("dinosaurId")Long dinosaurId, Model model) {
     	Optional<Dinosaur> findById = dinosaurRepository.findById(dinosaurId);
     	DinosaurDetail dinosaurDetail = new DinosaurDetail();
-    	dinosaurDetail.setDinosaur(findById.get());
+    	Dinosaur dinosaur = findById.get();
+		dinosaurDetail.setDinosaur(dinosaur);
+    	dinosaurDetail.setDinoArticles(dinoArticleRepository.findDinoArticlesByDinosaurId(dinosaur.getDinosaurId()));
     	//TODO set image details
     	return ResponseEntity.ok(dinosaurDetail);
     }
